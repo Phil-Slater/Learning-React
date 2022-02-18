@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AddBook from './components/AddBook';
 import BooksByGenre from './components/BooksByGenre';
+import Login from './components/Login';
 import ViewBooks from './components/ViewBooks';
 
 class App extends Component {
@@ -30,13 +31,18 @@ class App extends Component {
     this.fetchAllBooks()
   }
 
+  handleOnBookUpdated = () => {
+    console.log('called on book updated')
+  }
+
   render() {
     return (
       <div>
         <h1>Book Barn Website</h1>
+        <Login />
         <AddBook onBookAdded={this.handleOnBookAdded} />
         <BooksByGenre books={this.state.books} />
-        <ViewBooks books={this.state.books} onBookAdded={this.handleOnBookAdded} />
+        <ViewBooks books={this.state.books} onBookUpdated={this.handleOnBookUpdated} />
       </div>
     )
   }

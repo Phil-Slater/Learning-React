@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const models = require('./models')
-// json parser 
+const bcrypt = require("bcryptjs");
 app.use(express.json())
 app.use(cors())
 
@@ -25,13 +25,54 @@ app.get('/books', async (req, res) => {
     res.json(books)
 })
 
-app.post('/delete-book', async (req, res) => {
+app.post('/delete-book/:id', async (req, res) => {
     const deletedBook = await models.Book.destroy({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     })
-    console.log(deletedBook)
+    res.json(deletedBook)
+})
+
+app.get('/update-book/:id', async (req, res) => {
+    const book = await models.Book.findOne({
+        where: {
+            id: req.params.id
+        }
+    })
+
+    res.json(book)
+})
+
+app.post('/register', async (req, res) => {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    const user = {
+        username: req.body.username,
+        password: hashedPassword
+    }
+
+    const userCreated = await models.User.create(user)
+    res.json(userCreated)
+})
+
+app.get('/login', async (req, res) => {
+    const user = await models.User.findOne({
+        where: {
+            username: req.body.username
+        }
+    })
+
+    if (!user) {
+        const match = bcrypt.compare(req.body.password, user.dataValues.password)
+        if (!match) {
+            // logged in
+        } else {
+            // password is incorrect
+        }
+    } else {
+        // username does not exist
+    }
+
 })
 
 app.listen(8080, () => {
