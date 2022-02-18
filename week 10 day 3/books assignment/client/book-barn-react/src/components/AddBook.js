@@ -1,51 +1,44 @@
 
-import React, { Component } from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-class AddBook extends Component {
-    constructor() {
-        super()
-        this.state = {
-            title: '',
-            genre: '',
-            publisher: '',
-            year: null,
-            imageURL: ''
-        }
-    }
+function AddBook() {
 
-    handleTextUpdate = (event) => {
-        this.setState({
+    const [book, setBook] = useState({})
+    const navigate = useNavigate()
+
+    const handleTextUpdate = (event) => {
+        setBook({
+            ...book,
             [event.target.name]: event.target.value
         })
     }
 
-    handleSaveBook = () => {
+    const handleSaveBook = () => {
         fetch('http://localhost:8080/add-book', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.state)
+            body: JSON.stringify(book)
         }).then(response => response.json())
             .then(() => {
-                this.props.onBookAdded()
+                navigate('/view-books')
             })
     }
 
+    return (
+        <div>
+            <h1>Add Book</h1>
+            <input type="text" placeholder="Enter Book Title" name="title" onChange={handleTextUpdate} />
+            <input type="text" placeholder="Enter Book Genre" name="genre" onChange={handleTextUpdate} />
+            <input type="text" placeholder="Enter Book Publisher" name="publisher" onChange={handleTextUpdate} />
+            <input type="number" placeholder="Enter Book Year" name="year" onChange={handleTextUpdate} />
+            <input type="text" placeholder="Enter Image URL" name="imageURL" onChange={handleTextUpdate} />
+            <button onClick={handleSaveBook}>Add Book</button>
+        </div>
+    )
 
-    render() {
-        return (
-            <div>
-                <h1>Add Book</h1>
-                <input type="text" placeholder="Enter Book Title" name="title" onChange={this.handleTextUpdate} />
-                <input type="text" placeholder="Enter Book Genre" name="genre" onChange={this.handleTextUpdate} />
-                <input type="text" placeholder="Enter Book Publisher" name="publisher" onChange={this.handleTextUpdate} />
-                <input type="number" placeholder="Enter Book Year" name="year" onChange={this.handleTextUpdate} />
-                <input type="text" placeholder="Enter Image URL" name="imageURL" onChange={this.handleTextUpdate} />
-                <button onClick={this.handleSaveBook}>Add Book</button>
-            </div>
-        )
-    }
 }
 
 export default AddBook 

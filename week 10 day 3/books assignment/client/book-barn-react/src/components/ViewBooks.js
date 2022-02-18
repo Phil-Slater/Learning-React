@@ -3,50 +3,48 @@ import React, { Component } from 'react'
 
 class ViewBooks extends Component {
 
-    // constructor() {
-    //     super()
-    //     this.state = {
-    //         id: null,
-    //     }
-    // }
+    constructor() {
+        super()
+        this.state = {
+            books: []
+        }
+    }
 
-    // updateBook = (id) => {
-    //     fetch(`http://localhost:8080/update-book/${id}`)
-    //         .then(response => response.json())
-    //         .then((book) => {
-    //             this.props.onBookUpdated(book)
-    //         })
-    // }
+    handleBookDelete = (bookId) => {
+        fetch(`http://localhost:8080/delete-book/${bookId}`, {
+            method: 'DELETE'
+        }).then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    this.fetchAllBooks()
+                }
+            })
+    }
 
-    // handleMouseEnter = (id) => {
-    //     this.setState({
-    //         id: id
-    //     })
-    // }
+    fetchAllBooks = () => {
+        fetch('http://localhost:8080/books')
+            .then(response => response.json())
+            .then(books => {
+                this.setState({
+                    books: books
+                })
+            })
+    }
 
-    // deleteBook = (id) => {
-    //     fetch(`http://localhost:8080/delete-book/${id}`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(this.state)
-    //     }).then(response => response.json())
-    //         .then(() => {
-    //             this.props.onBookAdded()
-    //         })
-    // }
-
+    componentDidMount() {
+        this.fetchAllBooks()
+    }
 
     render() {
-        const bookItems = this.props.books.map(book => {
-            return <div key={book.id}><b>{book.title}</b> - {book.genre} - {book.publisher} - {book.year} <button onClick={this.updateBook}>Update</button><div><img src={book.imageURL} width='10%' alt="" /></div></div>
+        const bookItems = this.state.books.map(book => {
+            return <div key={book.id}><b>{book.title}</b> - {book.genre} - {book.publisher} - {book.year} <button onClick={() => this.handleBookDelete(book.id)}>Delete</button><div><img src={book.imageURL} width='10%' alt="" /></div></div>
         })
 
         return (
             <div>
                 <h1>Books</h1>
                 {bookItems}
+
             </div>
         )
     }

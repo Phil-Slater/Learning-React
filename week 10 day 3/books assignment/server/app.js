@@ -25,13 +25,17 @@ app.get('/books', async (req, res) => {
     res.json(books)
 })
 
-app.post('/delete-book/:id', async (req, res) => {
-    const deletedBook = await models.Book.destroy({
-        where: {
-            id: req.params.id
-        }
-    })
-    res.json(deletedBook)
+app.delete('/delete-book/:id', async (req, res) => {
+    try {
+        const deletedBook = await models.Book.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({ success: true })
+    } catch (error) {
+        res.json({ success: false, message: 'Unable to delete book.' })
+    }
 })
 
 app.get('/update-book/:id', async (req, res) => {
