@@ -59,22 +59,28 @@ app.post('/register', async (req, res) => {
     res.json(userCreated)
 })
 
-app.get('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
+    console.log(req.body.username)
     const user = await models.User.findOne({
         where: {
             username: req.body.username
         }
     })
 
-    if (!user) {
-        const match = bcrypt.compare(req.body.password, user.dataValues.password)
-        if (!match) {
+    if (user) {
+        const match = await bcrypt.compare(req.body.password, user.dataValues.password)
+        console.log(match)
+        if (match) {
             // logged in
+            res.send({ message: 'SUCCESS', username: user.dataValues.username })
         } else {
             // password is incorrect
+            res.send({ message: 'ERROR' })
         }
-    } else {
+    }
+    else {
         // username does not exist
+        res.send({ message: 'ERROR' })
     }
 
 })

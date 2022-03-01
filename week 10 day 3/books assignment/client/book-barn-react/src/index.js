@@ -5,19 +5,30 @@ import reportWebVitals from './reportWebVitals';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import AddBook from './components/AddBook';
 import ViewBooks from './components/ViewBooks';
-import BaseLayout, { Menu } from './components/BaseLayout';
+import Register from './components/Register';
+import Login from './components/Login';
+import BaseLayout from './components/BaseLayout';
+import { createStore } from 'redux'
+import reducer from './store/reducer';
+import { Provider } from 'react-redux';
+
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <BaseLayout>
-        <Routes>
-          <Route path='/add-book' element={<AddBook />} />
-          <Route path='/view-books' element={<ViewBooks />} />
-        </Routes>
-      </BaseLayout>
+    <Provider store={store}>
+      <BrowserRouter>
+        <BaseLayout>
+          <Routes>
+            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/add-book' element={<AddBook />} />
+            <Route path='/view-books' element={<ViewBooks />} />
+          </Routes>
+        </BaseLayout>
 
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

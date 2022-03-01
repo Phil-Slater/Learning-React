@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react"
+import { useNavigate } from 'react-router-dom'
+import { connect } from 'react-redux'
+import * as actionCreators from '../store/creators/actionCreators'
 
-function Login() {
+function Login(props) {
 
     const [user, setUser] = useState()
+    const navigate = useNavigate()
 
     const handleTextChange = (event) => {
         setUser({
@@ -12,7 +16,25 @@ function Login() {
     }
 
     const handleLogin = () => {
-        fetch('http://localhost:8080/login')
+        fetch('http://localhost:8080/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }).then(response => response.json())
+            .then(result => {
+                if (result.message === 'SUCCESS') {
+                    props.onLogin(result.username)
+                    alert('You are logged in!')
+                    // put username in global state
+                    // result.username
+                    navigate('/view-books')
+                } else {
+                    alert('Error: please check your username and password.')
+                }
+            })
+
 
     }
 
@@ -24,4 +46,12 @@ function Login() {
         </div>
     )
 }
-export default Login
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLogin: (username) => dispatch(actionCreators.logIn(username))
+    }
+}
+
+
+export default connect(null, mapDispatchToProps)(Login)
