@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../store/creators/actionCreators'
 
 function MenuLoggedOut() {
+    // edit menu component - use ternary operator
+
     return (
         <div>
             {/* <div><NavLink to='/'>Home</NavLink></div> */}
@@ -19,6 +21,7 @@ function MenuLoggedIn() {
         <div>
             <div><NavLink to='/add-book'>Add Book</NavLink></div>
             <div><NavLink to='/view-books'>View All Books</NavLink></div>
+            <div><NavLink to='/favorites'>Favorites</NavLink></div>
         </div>
     )
 }
@@ -47,8 +50,8 @@ function BaseLayout(props) {
 
 const mapStateToProps = (state) => {
     return {
-        isAuthenticated: state.isAuthenticated,
-        cart: state.cart
+        isAuthenticated: state.userReducer.isAuthenticated,
+        cart: state.cartReducer.cart
     }
 }
 

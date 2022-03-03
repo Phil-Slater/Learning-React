@@ -3,7 +3,8 @@ import * as actionTypes from './actions/actionTypes'
 const initialState = {
     user: '',
     isAuthenticated: false,
-    cart: 0
+    cart: 0,
+    favorites: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -25,6 +26,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 cart: state.cart + 1
+            }
+        case actionTypes.ADD_FAVORITE:
+            return {
+                ...state,
+                favorites: [...state.favorites, action.payload]
             }
         default:
             return state

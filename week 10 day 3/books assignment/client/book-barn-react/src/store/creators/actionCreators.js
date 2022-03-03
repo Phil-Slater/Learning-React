@@ -19,3 +19,10 @@ export const addToCart = () => {
         type: actionTypes.ADD_TO_CART
     }
 }
+
+export const addFavorite = (bookTitle) => {
+    return {
+        type: actionTypes.ADD_FAVORITE,
+        payload: bookTitle
+    }
+}

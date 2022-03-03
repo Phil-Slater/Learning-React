@@ -8,11 +8,21 @@ import ViewBooks from './components/ViewBooks';
 import Register from './components/Register';
 import Login from './components/Login';
 import BaseLayout from './components/BaseLayout';
-import { createStore } from 'redux'
-import reducer from './store/reducer';
+import { createStore, combineReducers } from 'redux'
+//import reducer from './store/reducer';
 import { Provider } from 'react-redux';
+import Favorites from './components/Favorites';
+import userReducer from './store/reducers/user'
+import cartReducer from './store/reducers/cart'
+import favoritesReducer from './store/reducers/favorites'
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const rootReducer = combineReducers({
+  userReducer: userReducer,
+  cartReducer: cartReducer,
+  favoritesReducer: favoritesReducer
+})
+
+const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,6 +34,7 @@ ReactDOM.render(
             <Route path='/login' element={<Login />} />
             <Route path='/add-book' element={<AddBook />} />
             <Route path='/view-books' element={<ViewBooks />} />
+            <Route path='/favorites' element={<Favorites />} />
           </Routes>
         </BaseLayout>
 
