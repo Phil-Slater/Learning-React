@@ -26,3 +26,16 @@ export const addFavorite = (bookTitle) => {
         payload: bookTitle
     }
 }
+
+export const getAllBooks = () => {
+    return (dispatch) => {
+        fetch('http://localhost:8080/books')
+            .then(response => response.json())
+            .then(books => {
+                dispatch({
+                    type: actionTypes.ALL_BOOKS,
+                    payload: books
+                })
+            })
+    }
+}

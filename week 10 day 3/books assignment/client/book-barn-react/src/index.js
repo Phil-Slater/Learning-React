@@ -8,21 +8,25 @@ import ViewBooks from './components/ViewBooks';
 import Register from './components/Register';
 import Login from './components/Login';
 import BaseLayout from './components/BaseLayout';
-import { createStore, combineReducers } from 'redux'
-//import reducer from './store/reducer';
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux';
 import Favorites from './components/Favorites';
 import userReducer from './store/reducers/user'
 import cartReducer from './store/reducers/cart'
 import favoritesReducer from './store/reducers/favorites'
+import booksReducer from './store/reducers/books'
+import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
   userReducer: userReducer,
   cartReducer: cartReducer,
-  favoritesReducer: favoritesReducer
+  favoritesReducer: favoritesReducer,
+  booksReducer: booksReducer
 })
 
-const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
 ReactDOM.render(
   <React.StrictMode>
