@@ -28,6 +28,7 @@ function Register() {
 
     return (
         <div>
+            <input type="text" placeholder="Email address" name='email' onChange={handleTextChange} />
             <input type="text" placeholder="Username" name='username' onChange={handleTextChange} />
             <input type="password" placeholder="Password" name='password' onChange={handleTextChange} />
             <button onClick={handleRegister}>Register</button>

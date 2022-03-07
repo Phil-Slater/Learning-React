@@ -5,15 +5,20 @@ const models = require('./models')
 const bcrypt = require("bcryptjs");
 app.use(express.json())
 app.use(cors())
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
+const authenticate = require('./utils/authenticationMiddleware')
 
 
 app.post('/add-book', async (req, res) => {
+    console.log(req.body)
     const book = {
         title: req.body.title,
         genre: req.body.genre,
         publisher: req.body.publisher,
         year: req.body.year,
-        imageURL: req.body.imageURL
+        imageURL: req.body.imageURL,
+        username: req.body.username
     }
 
     const bookAdded = await models.Book.create(book)
@@ -48,11 +53,48 @@ app.get('/update-book/:id', async (req, res) => {
     res.json(book)
 })
 
+app.post('/update-email/:username', async (req, res) => {
+    //find user
+    const user = await models.User.findOne({
+        where: {
+            email: req.body.oldEmail
+        }
+    })
+
+    if (user) {
+        const userUpdated = await models.User.update({ email: req.body.newEmail }, {
+            where: {
+                username: req.params.username
+            }
+        })
+        console.log(userUpdated)
+        if (userUpdated) {
+            res.send({ message: 'Your email address has been updated.' })
+        }
+    } else {
+        res.send({ message: 'Unable to update email address.' })
+    }
+
+})
+
+app.get('/:username/my-books', authenticate, async (req, res) => {
+    console.log('hi')
+    const books = await models.Book.findAll({
+        where: {
+            username: req.params.username
+        }
+    })
+    console.log('hello')
+    console.log(books)
+    res.json(books)
+})
+
 app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const user = {
         username: req.body.username,
-        password: hashedPassword
+        password: hashedPassword,
+        email: req.body.email
     }
 
     const userCreated = await models.User.create(user)
@@ -72,15 +114,16 @@ app.post('/login', async (req, res) => {
         console.log(match)
         if (match) {
             // logged in
-            res.send({ message: 'SUCCESS', username: user.dataValues.username })
+            const token = jwt.sign({ username: user.dataValues.username }, process.env.JWT_SECRET_KEY)
+            res.send({ message: 'SUCCESS', username: user.dataValues.username, token: token })
         } else {
             // password is incorrect
-            res.send({ message: 'ERROR' })
+            res.send({ message: 'AUTHENTICATION ERROR' })
         }
     }
     else {
         // username does not exist
-        res.send({ message: 'ERROR' })
+        res.send({ message: 'AUTHENTICATION ERROR' })
     }
 
 })

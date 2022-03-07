@@ -25,11 +25,11 @@ function Login(props) {
         }).then(response => response.json())
             .then(result => {
                 if (result.message === 'SUCCESS') {
+                    // puts username in global state
                     props.onLogin(result.username)
                     alert('You are logged in!')
-                    // put username in global state
-                    // result.username
-                    navigate('/view-books')
+                    localStorage.setItem('jwt', result.token)
+                    navigate('/view-all-books')
                 } else {
                     alert('Error: please check your username and password.')
                 }

@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-function AddBook() {
+function AddBook(props) {
 
     const [book, setBook] = useState({})
     const navigate = useNavigate()
 
     const handleTextUpdate = (event) => {
+
         setBook({
             ...book,
             [event.target.name]: event.target.value
@@ -15,6 +17,7 @@ function AddBook() {
     }
 
     const handleSaveBook = () => {
+        book.username = props.username
         fetch('http://localhost:8080/add-book', {
             method: 'POST',
             headers: {
@@ -23,7 +26,7 @@ function AddBook() {
             body: JSON.stringify(book)
         }).then(response => response.json())
             .then(() => {
-                navigate('/view-books')
+                navigate('/view-all-books')
             })
     }
 
@@ -41,4 +44,10 @@ function AddBook() {
 
 }
 
-export default AddBook 
+const mapStateToProps = (state) => {
+    return {
+        username: state.userReducer.user
+    }
+}
+
+export default connect(mapStateToProps)(AddBook) 

@@ -11,7 +11,7 @@ function MenuLoggedOut() {
             <div><NavLink to='/register'>Register</NavLink></div>
             <div><NavLink to='/login'>Login</NavLink></div>
             <div><NavLink to='/add-book'>Add Book</NavLink></div>
-            <div><NavLink to='/view-books'>View All Books</NavLink></div>
+            <div><NavLink to='/view-all-books'>View All Books</NavLink></div>
         </div>
     )
 }
@@ -20,8 +20,10 @@ function MenuLoggedIn() {
     return (
         <div>
             <div><NavLink to='/add-book'>Add Book</NavLink></div>
-            <div><NavLink to='/view-books'>View All Books</NavLink></div>
+            <div><NavLink to='/view-all-books'>View All Books</NavLink></div>
             <div><NavLink to='/favorites'>Favorites</NavLink></div>
+            <div><NavLink to='/my-books'>My Books</NavLink></div>
+            <div><NavLink to='/profile'>Profile</NavLink></div>
         </div>
     )
 }

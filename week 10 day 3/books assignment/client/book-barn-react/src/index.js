@@ -7,6 +7,8 @@ import AddBook from './components/AddBook';
 import ViewBooks from './components/ViewBooks';
 import Register from './components/Register';
 import Login from './components/Login';
+import Profile from './components/Profile';
+import MyBooks from './components/MyBooks';
 import BaseLayout from './components/BaseLayout';
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux';
@@ -37,8 +39,10 @@ ReactDOM.render(
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/add-book' element={<AddBook />} />
-            <Route path='/view-books' element={<ViewBooks />} />
+            <Route path='/view-all-books' element={<ViewBooks />} />
             <Route path='/favorites' element={<Favorites />} />
+            <Route path='/my-books' element={<MyBooks />} />
+            <Route path='/profile' element={<Profile />} />
           </Routes>
         </BaseLayout>
 

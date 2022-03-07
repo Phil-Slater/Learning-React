@@ -9,6 +9,7 @@ export const logIn = (username) => {
 }
 
 export const logOut = () => {
+    localStorage.removeItem('jwt')
     return {
         type: actionTypes.LOGGED_OUT
     }
