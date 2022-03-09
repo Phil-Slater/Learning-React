@@ -29,6 +29,8 @@ function Login(props) {
                     props.onLogin(result.username)
                     alert('You are logged in!')
                     localStorage.setItem('jwt', result.token)
+                    // set username in local storage
+                    localStorage.setItem('username', result.username)
                     navigate('/view-all-books')
                 } else {
                     alert('Error: please check your username and password.')

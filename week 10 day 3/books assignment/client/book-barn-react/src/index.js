@@ -18,6 +18,7 @@ import cartReducer from './store/reducers/cart'
 import favoritesReducer from './store/reducers/favorites'
 import booksReducer from './store/reducers/books'
 import thunk from 'redux-thunk';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const rootReducer = combineReducers({
   userReducer: userReducer,
@@ -30,6 +31,9 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
+const token = localStorage.getItem('jwt')
+store.dispatch({ type: 'ON_AUTH', payload: token })
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
@@ -38,11 +42,22 @@ ReactDOM.render(
           <Routes>
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/add-book' element={<AddBook />} />
+            <Route path='/add-book' element={
+              <ProtectedRoute>
+                <AddBook />
+              </ProtectedRoute>} />
             <Route path='/view-all-books' element={<ViewBooks />} />
-            <Route path='/favorites' element={<Favorites />} />
-            <Route path='/my-books' element={<MyBooks />} />
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/favorites' element={
+              <ProtectedRoute>
+                <Favorites />
+              </ProtectedRoute>} />
+            <Route path='/my-books' element={
+              <ProtectedRoute>
+                <MyBooks />
+              </ProtectedRoute>} />
+            <Route path='/profile' element={<ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>} />
           </Routes>
         </BaseLayout>
 
